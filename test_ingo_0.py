@@ -53,4 +53,6 @@ def insert(root, node):
                 print('root.right is NOT None ')
                 insert(root.right, node)
 
-# for x in X:
+t = Node(X[0])
+for x in X[1:]:
+    insert(t, Node(x))
