@@ -22,32 +22,35 @@ ax.scatter(X[:, 0], X[:, 1])
 for i, txt in enumerate(y):
     ax.annotate((X[i, 0], X[i, 1]), (X[i, 0], X[i, 1]))
     
-    
+
 class Node:
-    def __init__(self, val):
+    def __init__(self, val, alignment_axis=0):
         self.left = None
         self.right = None
+        self.axis = 0
         self.data = val
 
 def insert(root, node):
     if root is None:
         root = node
     else:
-        if root.data > node.data:
-            print('root.data > node.data')
+        node.axis = 1 - root.axis
+        print('node axis now ', node.axis)
+        if node.data[root.axis] < root.data[root.axis]:
+            print('node.data[root.axis] < root.data[root.axis] ')
             if root.left is None:
-                print('root.left is None')
+                print('root.left is None ')
                 root.left = node
             else:
-                print('root.left is NOT None')
+                print('root.left is NOT None ')
                 insert(root.left, node)
         else:
-            print('root.data <= node.data')
+            print('node.data[root.axis] >= root.data[root.axis] ')
             if root.right is None:
-                print('root.right is None')
+                print('root.right is None ')
                 root.right = node
             else:
-                print('root.right is NOT None')
+                print('root.right is NOT None ')
                 insert(root.right, node)
 
-t = Node(3)
+# for x in X:
