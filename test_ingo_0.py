@@ -37,6 +37,10 @@ class Node:
     def __call__(self):
         return self.data
 
+class Tree:
+    def __init__(self, val):
+        self.root = Node(val)
+        
 def insert(root, node):
     if root is None:
         root = node
@@ -63,10 +67,15 @@ def insert(root, node):
 
 best_distance = 1e5
 best_node = None
+
 def find(node, q):
-    if node.
-    print('data: ', node.data)
-    print('axis: ', node.axis)
+    d = np.linalg.norm(node.data - q)
+    if d < best_distance:
+        best_distance = d
+        best_node = node
+        print('best d: ', d)
+        print('best node: ', node.data)
+        
     if q[node.axis] < node.data[node.axis]:
         print('q[node.axis] < node.data[node.axis] ')
         if node.left is None:
@@ -86,4 +95,4 @@ t = Node(X[0])
 for x in X[1:]:
     insert(t, Node(x))
     
-
+find(t, q)
