@@ -41,34 +41,35 @@ class Tree:
     def __init__(self, val):
         self.root = Node(val)
         
-def insert(root, node):
-    if root is None:
-        root = node
-    else:
-        node.axis = (root.axis + 1) % DIM
-        print('node axis now ', node.axis)
-        if node.data[root.axis] < root.data[root.axis]:
-            print('node.data[root.axis] < root.data[root.axis] ')
-            if root.left is None:
-                print('root.left is None ')
-                root.left = node
-            else:
-                print('root.left is NOT None ')
-                insert(root.left, node)
+    def insert(self, node):
+        if self.root is None:
+            self.root = node
         else:
-            print('node.data[root.axis] >= root.data[root.axis] ')
-            if root.right is None:
-                print('root.right is None ')
-                root.right = node
+            node.axis = (self.root.axis + 1) % DIM
+            print('node axis now ', node.axis)
+            if node.data[self.root.axis] < self.root.data[self.root.axis]:
+                print('node.data[self.root.axis] < self.root.data[self.root.axis] ')
+                if self.root.left is None:
+                    print('self.root.left is None ')
+                    self.root.left = node
+                else:
+                    print('self.root.left is NOT None ')
+                    insert(self.root.left, node)
             else:
-                print('root.right is NOT None ')
-                insert(root.right, node)
+                print('node.data[self.root.axis] >= self.root.data[self.root.axis] ')
+                if self.root.right is None:
+                    print('self.root.right is None ')
+                    self.root.right = node
+                else:
+                    print('self.root.right is NOT None ')
+                    insert(self.root.right, node)
                 
 
-best_distance = 1e5
-best_node = None
+
 
 def find(node, q):
+    global best_distance
+    global best_node
     d = np.linalg.norm(node.data - q)
     if d < best_distance:
         best_distance = d
@@ -91,8 +92,9 @@ def find(node, q):
             print('node.right is NOT None ')
             find(node.right, q)
 
-t = Node(X[0])
+t = Tree(X[0])
 for x in X[1:]:
-    insert(t, Node(x))
+    # insert(t, Node(x))
+    t.insert(Node(x))
     
 find(t, q)
