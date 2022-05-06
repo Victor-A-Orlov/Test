@@ -22,6 +22,10 @@ ax.scatter(X[:, 0], X[:, 1])
 for i, txt in enumerate(y):
     ax.annotate((X[i, 0], X[i, 1]), (X[i, 0], X[i, 1]))
     
+q = np.array([10,34])
+ax.scatter(q[0], q[1])
+
+DIM = 2
 
 class Node:
     def __init__(self, val, alignment_axis=0):
@@ -29,12 +33,15 @@ class Node:
         self.right = None
         self.axis = 0
         self.data = val
+        
+    def __call__(self):
+        return self.data
 
 def insert(root, node):
     if root is None:
         root = node
     else:
-        node.axis = 1 - root.axis
+        node.axis = (root.axis + 1) % DIM
         print('node axis now ', node.axis)
         if node.data[root.axis] < root.data[root.axis]:
             print('node.data[root.axis] < root.data[root.axis] ')
@@ -52,7 +59,31 @@ def insert(root, node):
             else:
                 print('root.right is NOT None ')
                 insert(root.right, node)
+                
+
+best_distance = 1e5
+best_node = None
+def find(node, q):
+    if node.
+    print('data: ', node.data)
+    print('axis: ', node.axis)
+    if q[node.axis] < node.data[node.axis]:
+        print('q[node.axis] < node.data[node.axis] ')
+        if node.left is None:
+            pass
+        else:
+            print('root.left is NOT None ')
+            find(node.left, q)
+    else:
+        print('q[node.axis] >= node.data[node.axis]')
+        if node.right is None:
+            pass
+        else:
+            print('node.right is NOT None ')
+            find(node.right, q)
 
 t = Node(X[0])
 for x in X[1:]:
     insert(t, Node(x))
+    
+
