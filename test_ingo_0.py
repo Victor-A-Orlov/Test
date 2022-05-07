@@ -60,6 +60,7 @@ class Tree:
                     self.insert(root.right, node)
                 
 
+
 def find(node, q):
     global best_distance
     global best_node
@@ -85,3 +86,26 @@ for x in X[1:]:
     
 pass
 # find(t.tree, q)
+
+def search(root, q):
+    best_distance = 10000
+    best_node = root
+    node = root
+    while True:
+        d = np.linalg.norm(node.data - q)
+        if d < best_distance:
+            best_distance = d
+            best_node = node
+        if q[node.axis] < node.data[node.axis]:
+            node = node.left
+            if node is None:
+                break
+        else:
+            node = node.right
+            if node is None:
+                break
+    
+    return best_node.data
+    
+b = search(t.root, q)
+print(b)
