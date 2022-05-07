@@ -41,21 +41,23 @@ class Tree:
     def __init__(self, val):
         self.root = Node(val)
         
-    def insert(self, node):
-        if self.root is None:
-            self.root = node
+    def insert(self, root, node):
+        if root is None:
+            root = node
         else:
-            node.axis = (self.root.axis + 1) % DIM
-            if node.data[self.root.axis] < self.root.data[self.root.axis]:
-                if self.root.left is None:
-                    self.root.left = node
+            node.axis = (root.axis + 1) % DIM
+            if node.data[root.axis] < root.data[root.axis]:
+                if root.left is None:
+                    root.left = node
+                    print('ok')
                 else:
-                    self.insert(node)
+                    self.insert(root.left, node)
             else:
-                if self.root.right is None:
-                    self.root.right = node
+                if root.right is None:
+                    root.right = node
+                    print('ok')
                 else:
-                    self.insert(node)
+                    self.insert(root.right, node)
                 
 
 def find(node, q):
@@ -79,6 +81,7 @@ def find(node, q):
 
 t = Tree(X[0])
 for x in X[1:]:
-    t.insert(Node(x))
+    t.insert(t.root, Node(x))
     
-find(t, q)
+pass
+# find(t.tree, q)
