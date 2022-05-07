@@ -6,16 +6,7 @@ from sklearn.metrics import accuracy_score
 
 n_samples = 1000
 random_state = 170
-# X, y = make_classification(
-#     n_features=2, 
-#     n_redundant=0, 
-#     n_informative=2, 
-#     random_state=1, 
-#     n_clusters_per_class=1,
-#     n_samples=n_samples,
-#     scale=10,
-#     n_classes=2
-# )
+
 
 digits = load_digits()
 X = digits.data
@@ -24,12 +15,6 @@ y = digits.target
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)
 
-# plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train)
-
-# for x in X_test:
-#     plt.scatter(x[0], x[1], c='b')
-
-DIM = 64
 
 class Node:
     def __init__(self, X, y, alignment_axis=0):
@@ -52,7 +37,9 @@ class Tree:
         else:
             if root is None:
                 root = self.root
-            node.axis = (root.axis + 1) % DIM
+                
+            dim = node.X.shape[0]
+            node.axis = (root.axis + 1) % dim
             if node.X[root.axis] < root.X[root.axis]:
                 if root.left is None:
                     root.left = node
@@ -64,11 +51,6 @@ class Tree:
                 else:
                     self.insert(root.right, node)
                 
-
-t = Tree()
-for x_sample, y_sample in zip(X_train, y_train):
-    t.insert(node=Node(x_sample, y_sample))
-    
 def query_targets(start_node, Q):
     results = []
     for q in Q:
@@ -108,6 +90,10 @@ class Classifier:
     def predict(self, query):
         return query_targets(self.tree.root, query)
 
+t = Tree()
+for x_sample, y_sample in zip(X_train, y_train):
+    t.insert(node=Node(x_sample, y_sample))
+    
 
 clf = Classifier()
 clf.fit(X_train, y_train)
