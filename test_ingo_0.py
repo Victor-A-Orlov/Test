@@ -101,11 +101,13 @@ class Classifier:
         for x_sample, y_sample in zip(X, y):
             self.tree.insert(node=Node(x_sample, y_sample))
 
-    # def predict(self, query):
-    #     query_targets
+    def predict(self, query):
+        return query_targets(self.tree.root, query)
 
 y_pred = query_targets(t.root, X_test)
 print(accuracy_score(y_test, y_pred))
 
 clf = Classifier()
 clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+print(accuracy_score(y_test, y_pred))
