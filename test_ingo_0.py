@@ -14,7 +14,6 @@ X, y = make_classification(
     scale=10
 )
 X = X.astype('int')
-# X = X + np.array([1, 2])
 
 fig, ax = plt.subplots()
 ax.scatter(X[:, 0], X[:, 1])
@@ -38,13 +37,15 @@ class Node:
         return self.data
 
 class Tree:
-    def __init__(self, val):
-        self.root = Node(val)
+    def __init__(self, val=None):
+        self.root = None
         
-    def insert(self, root, node):
-        if root is None:
-            root = node
+    def insert(self, root=None, node=None):
+        if self.root is None:
+            self.root = node
         else:
+            if root is None:
+                root = self.root
             node.axis = (root.axis + 1) % DIM
             if node.data[root.axis] < root.data[root.axis]:
                 if root.left is None:
@@ -60,34 +61,11 @@ class Tree:
                     self.insert(root.right, node)
                 
 
-
-def find(node, q):
-    global best_distance
-    global best_node
-    d = np.linalg.norm(node.data - q)
-    if d < best_distance:
-        best_distance = d
-        best_node = node
-        
-    if q[node.axis] < node.data[node.axis]:
-        if node.left is None:
-            pass
-        else:
-            find(node.left, q)
-    else:
-        if node.right is None:
-            pass
-        else:
-            find(node.right, q)
-
-t = Tree(X[0])
-for x in X[1:]:
-    t.insert(t.root, Node(x))
+t = Tree()
+for x in X:
+    t.insert(node=Node(x))
     
-pass
-# find(t.tree, q)
-
-def search(root, q):
+def find(root, q):
     best_distance = 10000
     best_node = root
     node = root
@@ -106,6 +84,7 @@ def search(root, q):
                 break
     
     return best_node.data
-    
-b = search(t.root, q)
+
+
+b = find(t.root, q)
 print(b)
