@@ -2,9 +2,9 @@ from sklearn.datasets import load_digits, make_blobs, make_classification
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-
-n_samples = 100
+n_samples = 1000
 random_state = 170
 X, y = make_classification(
     n_features=2, 
@@ -13,7 +13,8 @@ X, y = make_classification(
     random_state=1, 
     n_clusters_per_class=1,
     n_samples=n_samples,
-    scale=10
+    scale=10,
+    n_classes=2
 )
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -51,13 +52,11 @@ class Tree:
             if node.X[root.axis] < root.X[root.axis]:
                 if root.left is None:
                     root.left = node
-                    print('ok')
                 else:
                     self.insert(root.left, node)
             else:
                 if root.right is None:
                     root.right = node
-                    print('ok')
                 else:
                     self.insert(root.right, node)
                 
@@ -66,18 +65,18 @@ t = Tree()
 for x_sample, y_sample in zip(X_train, y_train):
     t.insert(node=Node(x_sample, y_sample))
     
-def query_targets(root, Q):
+def query_targets(start_node, Q):
     results = []
     for q in Q:
-        _, y = find_one_neighbor(root, q)
-        results.append(y)
+        node = find_one_neighbor(start_node, q)
+        results.append(node.y)
     return np.array(results)
         
         
-def find_one_neighbor(root, q):
+def find_one_neighbor(start_node, q):
     best_distance = 10000
-    best_node = root
-    node = root
+    best_node = start_node
+    node = start_node
     while True:
         d = np.linalg.norm(node.X - q)
         if d < best_distance:
@@ -92,6 +91,21 @@ def find_one_neighbor(root, q):
             if node is None:
                 break
     
-    return best_node.X, best_node.y
+    return best_node
+
+class Classifier:
+    def __init__(self) -> None:
+        self.tree = Tree()
+
+    def fit(self, X, y):
+        for x_sample, y_sample in zip(X, y):
+            self.tree.insert(node=Node(x_sample, y_sample))
+
+    # def predict(self, query):
+    #     query_targets
 
 y_pred = query_targets(t.root, X_test)
+print(accuracy_score(y_test, y_pred))
+
+clf = Classifier()
+clf.fit(X_train, y_train)
