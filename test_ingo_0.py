@@ -6,26 +6,30 @@ from sklearn.metrics import accuracy_score
 
 n_samples = 1000
 random_state = 170
-X, y = make_classification(
-    n_features=2, 
-    n_redundant=0, 
-    n_informative=2, 
-    random_state=1, 
-    n_clusters_per_class=1,
-    n_samples=n_samples,
-    scale=10,
-    n_classes=2
-)
+# X, y = make_classification(
+#     n_features=2, 
+#     n_redundant=0, 
+#     n_informative=2, 
+#     random_state=1, 
+#     n_clusters_per_class=1,
+#     n_samples=n_samples,
+#     scale=10,
+#     n_classes=2
+# )
+
+digits = load_digits()
+X = digits.data
+y = digits.target
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)
 
-plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train)
+# plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train)
 
-for x in X_test:
-    plt.scatter(x[0], x[1], c='b')
+# for x in X_test:
+#     plt.scatter(x[0], x[1], c='b')
 
-DIM = 2
+DIM = 64
 
 class Node:
     def __init__(self, X, y, alignment_axis=0):
@@ -104,8 +108,6 @@ class Classifier:
     def predict(self, query):
         return query_targets(self.tree.root, query)
 
-y_pred = query_targets(t.root, X_test)
-print(accuracy_score(y_test, y_pred))
 
 clf = Classifier()
 clf.fit(X_train, y_train)
